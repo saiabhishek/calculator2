@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>Calculator</html>
+</title>
+</head>
+<body>
+<style type="text/css">
+	body
+	{
+		background-color:black;
+	}
+	.text
+	{
+		font-color:#FFFFFF;
+		border: solid;
+		border-width: 1px;
+	}
+	.display
+	{
+		background-color:#222;  
+		width:300px;  
+		left:15px;  
+		top:20px;  
+		height:300px; 
+	}
+	.button
+	{
+		border:solid;  
+		border-radius:1px;
+		position: relative;
+		margin-left:17px;  
+		cursor:pointer; 
+		border-color: black; 
+		color: white;
+	}
+	.button.black 
+	{  
+		color:black;  
+		width:40px;  
+		height:30px; 
+		background-color:#FFFFFF;  
+		font-color:white; 
+	}  
+	.button.largeh
+	{
+		width:40px;  
+		height:60px; 
+		color:black;  
+		background-color:#FFFFFF;  
+	}
+	.button.largev
+	{
+		width:120px;  
+		height:30px; 
+		color:black;  
+		background-color:#FFFFFF;  
+	}
+</style>
+<FORM name="Keypad">
+<div class="box">
+<div class="display"> 
+<table>
+<tr>
+<td colspan="2"><input type="text" id="t1" name="Input" class="text" size="20" readonly>
+<td><input type="button" value="C" class="button black" id="b/" onclick="Clear()"><br>
+</tr>
+<tr>
+<td colspan="7"><input name="ReadOut" id="output" type="text" class="text" size=24 value="0" readonly><br>
+</tr>
+<tr>
+<td><input type="button" value="+/-" class="button black" id="b/" onclick="Neg()">
+<td><input type='button' value="/" class="button black"id="b/"onclick="Operation('/')">
+<td><input type="button" value="*" class="button black" id="b*"onclick="Operation('*')">
+<td><input type="button" value="-" class="button black" id="b-"onclick="Operation('-')"><br>
+</tr>
+<tr>
+<td><input type="button" value="7" class="button black" id="b7"onclick="FKeyPad.Input.value+='7';NumPressed(7);
+">
+<td><input type="button" value="8" class="button black" id="b8"onclick="FKeyPad.Input.value+='8';NumPressed(8);
+">
+<td><input type="button" value="9" class="button black" id="b9"onclick="FKeyPad.Input.value+='9';NumPressed(9);
+">
+<td rowspan="2"><input type="button" value="+" class="button largeh" id="b+" onclick="Operation('+')"><br>
+</tr>
+<tr>
+<td><input type="button" value="4" class="button black" onclick="FKeyPad.Input.value+='4';NumPressed(4);
+">
+<td><input type="button" value="5" class="button black" onclick="FKeyPad.Input.value+='5';NumPressed(5);
+">
+<td><input type="button" value="6" class="button black" id="b6"onclick="FKeyPad.Input.value+='6';NumPressed(6);
+"><br>
+</tr>
+<tr>
+<td><input type="button" value="1" class="button black" id="b1"onclick="FKeyPad.Input.value+='1';NumPressed(1);
+">
+<td><input type="button" value="2" class="button black" id="b2"onclick="FKeyPad.Input.value+='2';NumPressed(2);
+">
+<td><input type="button" value="3" class="button black" id="b3"onclick="FKeyPad.Input.value+='3';NumPressed(3);
+"><br>
+<td rowspan="2"><input type="button" value="=" class="button largeh" id="b=" onclick="Operation('=')" >
+</tr>
+<tr>
+<td colspan="2"><input type="button" value="0" class="button largev" id="b0"onclick="NumPressed(0);">
+<td><input type="button" value="." class="button black" id="b." onclick="Decimal()">
+</tr>
+</td>
+</table>
+
+
+</FORM>
+</div>
+<script type="text/javascript">
+var FKeyPad = document.Keypad;
+var Accumulate = 0;
+var FlagNewNum = false;
+var PendingOp = "";
+//create a normal function assigning values from Buttons and displayed in two text boxes
+function NumPressed (Num) {
+if (FlagNewNum) {
+FKeyPad.ReadOut.value  = Num;
+FlagNewNum = false;
+   }
+else {
+if (FKeyPad.ReadOut.value == "0")
+FKeyPad.ReadOut.value = Num;
+
+else
+FKeyPad.ReadOut.value += Num;
+FKeyPad.Inputvalue+=Num;
+   }
+}
+//Creating an Operator function to perform operations which are given by 
+function Operation (Op) {
+var Readout = FKeyPad.ReadOut.value;
+
+if (FlagNewNum && PendingOp != "=");
+else
+{{{
+FlagNewNum = true;
+if ( '+' == PendingOp )
+Accumulate += parseFloat(Readout);
+else if ( '-' == PendingOp )
+Accumulate -= parseFloat(Readout);
+else if ( '/' == PendingOp )
+Accumulate /= parseFloat(Readout);
+else if ( '*' == PendingOp )
+Accumulate *= parseFloat(Readout);
+else{
+Accumulate = parseFloat(Readout);
+}
+}
+FKeyPad.ReadOut.value = Accumulate;
+PendingOp = Op;
+FKeyPad.Input.value+=PendingOp;
+if(PendingOp=='=')
+{
+	FKeyPad.Input.value=Accumulate;
+}
+}
+   }
+}
+function Decimal () {
+var curReadOut = FKeyPad.ReadOut.value;
+if (FlagNewNum) {
+curReadOut = "0.";
+FlagNewNum = false;
+   }
+else
+{
+if (curReadOut.indexOf(".") == -1)
+curReadOut += ".";
+}
+FKeyPad.ReadOut.value = curReadOut;
+var dot=parseInt(FKeyPad.ReadOut.value);
+FKeyPad.Input.value= curReadOut;
+}
+function Clear () {
+Accumulate = 0;
+PendingOp = "";
+FKeyPad.ReadOut.value = "0";
+FlagNewNum = true;
+FKeyPad.Input.value='';
+
+}
+function Neg () {
+FKeyPad.ReadOut.value = parseFloat(FKeyPad.ReadOut.value) * -1;
+FKeyPad.Input.value+='(*-1)';
+}
+
+</script>
+
+</body># calculator
+# calculator
+# calculator
